@@ -15,7 +15,7 @@ This is a Python script that web-scrapes the serial fictions of Wildbow (J.C. Mc
 Navigate to the downloaded directory (*e*.*g*. `~/Downloads/WildbowCrawler/`) in your terminal, then input the command
 
 ```
-python main.py <storyname> <formatkey> <italics> <arcsep> <chapsep>
+python main.py <storyname> <formatkey> <arcsep> <chapsep>
 ```
 
 with arguments
@@ -27,8 +27,7 @@ with arguments
 2. `<formatkey>` -- This is the keyword for which file structure the results will be placed in. Select one of
   * `single` -- this will create the `<storyname>` directory, containing `<storyname>.txt` with the full text of the story.
   * `per-arc` -- this will create the `<storyname>` directory, containing one `<arcnumber>_<arcname>.txt` file for each arc (*e*.*g*. `1_Gestation.txt`).
-3. `<italics>` -- This is the string that will delimit italicized text (as the output is plaintext). `*` and `_` are reasonable options; choose `none` if you insist upon no demarcation.
-4. `<arcsep>` and `<chapsep>` -- These are the strings inserted at the beginning of each arc and chapter, respectively, for CTRL+F purposes. Choose `none` for the empty string.
+3. `<arcsep>` and `<chapsep>` -- These are the strings inserted at the beginning of each arc and chapter, respectively, for CTRL+F purposes. Choose `none` for the empty string.
 
 Some example usages follow.
 
@@ -38,16 +37,19 @@ python main.py pact single _ #A #C
 python main.py twig per-arc none none Chapter:
 ```
 
-## Changelog / To-Do List
+## Changelog
 
-To be written once a stable working release is pushed. Instead, have a to-do list!
+### v0.9 (12 March '16)
 
-* Finish test-running the code for necessary unicode substitutions
+This is the first stable version of WildbowCrawler. It successfully passes through the entirety of Worm.
+
+## To-Do List
+
 * Support Pact and Twig
 * Implement sysargs
 * Write `Crawler.quit()`
 * Add opening to `per-arc`-style `.txt`s
-* Figure out packaging for imported modules
+* Figure out packaging for imported modules (?)
 * Go back in time to prevent the birth of anyone somewhat responsible for unicode
 
 ## Jolly Cooperation

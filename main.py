@@ -10,7 +10,7 @@ import bs4
 class Crawler():
     def __init__(self):
         #self.url = 'http://parahumans.wordpress.com/category/stories-arcs-1-10/arc-1-gestation/1-01/'
-        self.url = 'https://parahumans.wordpress.com/2013/03/12/scourge-19-7/'
+        self.url = 'https://parahumans.wordpress.com/2013/11/02/teneral-e-1/'
         self.italicsstring = u'*'
         self.boldstring = u'**'
         self.underlinestring = u'_'
@@ -42,13 +42,30 @@ class Crawler():
             u'\xc7': u'C',
             u'\xdc': u'U',
             u'\xe0': u'a',
+            u'\xe1': u'a',
+            u'\xe3': u'a',
             u'\xe4': u'a',
+            u'\xe8': u'e',
             u'\xe9': u'e',
+            u'\xea': u'e',
+            u'\xeb': u'e',
+            u'\xec': u'i',
             u'\xed': u'i',
+            u'\xf2': u'o',
+            u'\xf5': u'o',
             u'\xf6': u'o',
+            u'\xf9': u'u',
+            u'\xfa': u'u',
+            u'\xfc': u'u',
             u'\u0101': u'a',
+            u'\u0113': u'e',
+            u'\u011b': u'e',
+            u'\u012b': u'i',
             u'\u014d': u'o',
+            u'\u016b': u'u',
             u'\u01ce': u'a',
+            u'\u0302': u'',
+            u'\u0304': u'',
             u'\u2013': u'-',
             u'\u2018': u'\'',
             u'\u2019': u'\'',
@@ -60,6 +77,7 @@ class Crawler():
             u'\u25a0': u'---',
             u'\u263f': u'M',
             u'\u2666': u'*',
+            u'\n': u'\n\n',
         }
         self.reps = dict((re.escape(key), value) for key, value in self.reps.iteritems())
         self.reppattern = re.compile('|'.join(self.reps.keys()))
@@ -95,7 +113,7 @@ class Crawler():
         print 'Got title: {0!s}'.format(self.title)
 
     def get_arc(self):
-        arcregex = re.compile(r'(.*) (\d|e)')
+        arcregex = re.compile(r'(.*?):? (\d|e|End)')
         name = arcregex.search(self.title).group(1)
         self.previousarc = self.arc
         self.arc = name if name != 'Interlude' else self.arc
