@@ -108,6 +108,7 @@ class Crawler():
         string = string.replace(u'\xa0', u' ')
         string = string.replace(u'\xbd', u'.5')
         string = string.replace(u'\xdc', u'U')
+        string = string.replace(u'\xe9', u'e')
         string = string.replace(u'\u2013', u'-')
         string = string.replace(u'\u2018', u'\'')
         string = string.replace(u'\u2019', u'\'')
