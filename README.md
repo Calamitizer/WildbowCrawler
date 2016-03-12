@@ -43,10 +43,10 @@ python main.py twig per-arc none none Chapter:
 To be written once a stable working release is pushed. Instead, have a to-do list!
 
 * Finish test-running the code for necessary unicode substitutions
-* Strip dumb social media snippets
 * Support Pact and Twig
 * Implement sysargs
 * Write `Crawler.quit()`
+* Add opening to `per-arc`-style `.txt`s
 * Figure out packaging for imported modules
 * Go back in time to prevent the birth of anyone somewhat responsible for unicode
 
