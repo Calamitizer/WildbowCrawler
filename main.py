@@ -79,8 +79,8 @@ class Crawler():
             self.quit()
 
     def is_delimiter(self, tag):
-        has_previous = tag.find(attrs={'title': 'Last Chapter'}, recursive=False)
-        has_next = tag.find(attrs={'title': 'Next Chapter'}, recursive=False)
+        has_previous = tag.find('a', text=re.compile(r'Last Chapter'), recursive=False)
+        has_next = tag.find('a', text=re.compile(r'Next Chapter'), recursive=False)
         return has_previous or has_next
 
     def get_text(self):
