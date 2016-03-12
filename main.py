@@ -2,16 +2,16 @@
 
 import os
 import sys
-import requests
-import bs4
 import re
 import unicodedata
+import requests
+import bs4
 
 class Crawler():
     def __init__(self):
         self.url = 'http://parahumans.wordpress.com/category/stories-arcs-1-10/arc-1-gestation/1-01/'
         self.italicsstring = '*'
-        self.output = 'per-arc' # or 'per-arc'
+        self.output = 'per-arc' # 'single' or 'per-arc'
         self.arctag = '[ARC]'
         self.chaptertag = '[CHAPTER]'
         self.previousarc = u''
@@ -73,11 +73,10 @@ class Crawler():
 
     def get_content(self):
         self.content_tag = self.soup.find(attrs={'class': 'entry-content'})
-        delimiters = self.content_tag.find_all(self.is_delimiter)
-        if len(delimiters) != 2:
+        self.delimiters = self.content_tag.find_all(self.is_delimiter)
+        if len(self.delimiters) != 2:
             print 'Delimiter problem'
             self.quit()
-        (self.header, self.footer) = delimiters
 
     def is_delimiter(self, tag):
         has_previous = tag.find(attrs={'title': 'Last Chapter'}, recursive=False)
@@ -90,12 +89,16 @@ class Crawler():
             if list(tag.children):
                 list(tag.children)[0].insert_before(self.italicsstring)
                 list(tag.children)[-1].insert_after(self.italicsstring)
+        writing = False
         for element in self.content_tag.children:
             if isinstance(element, bs4.Tag):
-                if element not in (self.header, self.footer):
+                if element in self.delimiters:
+                    writing = not writing
+                elif writing:
                     rawstring += element.text
             elif isinstance(element, bs4.NavigableString):
-                rawstring += unicode(element)
+                if writing:
+                    rawstring += unicode(element)
             else:
                 print 'Unknown element type ' + `type(element)` + '.'
                 self.quit()
@@ -139,7 +142,7 @@ class Crawler():
             self.file.close()
     
     def get_next_url(self):
-        url = self.header.find('a', attrs={'title': 'Next Chapter'})
+        url = self.delimiters[0].find('a', attrs={'title': 'Next Chapter'})
         if url:
             self.url = url['href']
         else:
