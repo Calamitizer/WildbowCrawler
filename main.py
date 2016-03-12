@@ -9,8 +9,11 @@ import bs4
 
 class Crawler():
     def __init__(self):
-        self.url = 'http://parahumans.wordpress.com/category/stories-arcs-1-10/arc-1-gestation/1-01/'
-        self.italicsstring = '*'
+        #self.url = 'http://parahumans.wordpress.com/category/stories-arcs-1-10/arc-1-gestation/1-01/'
+        self.url = 'https://parahumans.wordpress.com/2013/03/12/scourge-19-7/'
+        self.italicsstring = u'*'
+        self.boldstring = u'**'
+        self.underlinestring = u'_'
         self.output = 'per-arc' # 'single' or 'per-arc'
         self.arctag = '[ARC]'
         self.chaptertag = '[CHAPTER]'
@@ -73,15 +76,17 @@ class Crawler():
 
     def get_content(self):
         self.content_tag = self.soup.find(attrs={'class': 'entry-content'})
-        self.delimiters = self.content_tag.find_all(self.is_delimiter)
+        self.delimiters = self.content_tag.find_all(self.is_delimiter, recursive=False)
         if len(self.delimiters) != 2:
-            print 'Delimiter problem'
+            print 'Delimiter problem: ' + `len(self.delimiters)`
+            for d in self.delimiters:
+                print d.prettify()
             self.quit()
 
     def is_delimiter(self, tag):
-        has_previous = tag.find('a', text=re.compile(r'Last Chapter'), recursive=False)
+        has_last = tag.find('a', text=re.compile(r'Last Chapter'), recursive=False)
         has_next = tag.find('a', text=re.compile(r'Next Chapter'), recursive=False)
-        return has_previous or has_next
+        return has_last or has_next
 
     def get_text(self):
         rawstring = u''
@@ -89,6 +94,14 @@ class Crawler():
             if list(tag.children):
                 list(tag.children)[0].insert_before(self.italicsstring)
                 list(tag.children)[-1].insert_after(self.italicsstring)
+        for tag in self.content_tag.find_all('strong'):
+            if list(tag.children):
+                list(tag.children)[0].insert_before(self.boldstring)
+                list(tag.children)[-1].insert_after(self.boldstring)
+        for tag in self.content_tag.find_all('span', attrs={'style': 'text-decoration-underline;'}):
+            if list(tag.children):
+                list(tag.children)[0].insert_before(self.underlinestring)
+                list(tag.children)[-1].insert_after(self.underlinestring)
         writing = False
         for element in self.content_tag.children:
             if isinstance(element, bs4.Tag):
@@ -111,14 +124,19 @@ class Crawler():
         string = string.replace(u'\xdc', u'U')
         string = string.replace(u'\xe4', u'a')
         string = string.replace(u'\xe9', u'e')
+        string = string.replace(u'\xed', u'i')
         string = string.replace(u'\xf6', u'o')
         string = string.replace(u'\u2013', u'-')
         string = string.replace(u'\u2018', u'\'')
         string = string.replace(u'\u2019', u'\'')
         string = string.replace(u'\u201c', u'"')
         string = string.replace(u'\u201d', u'"')
+        string = string.replace(u'\u2022', u'*')
         string = string.replace(u'\u2026', u'...')
+        string = string.replace(u'\u25ba', u'->')
         string = string.replace(u'\u25a0', u'---')
+        string = string.replace(u'\u263f', u'M')
+        string = string.replace(u'\u2666', u'*')
         string = string.replace(u'\n', u'\n\n')
         string = string.strip()
         return string
