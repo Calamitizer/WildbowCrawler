@@ -23,6 +23,7 @@ class Crawler():
         self.chapternumber = 0
         self.story = 'Worm'
         self.init_dir()
+        self.init_replacement()
         
     def init_dir(self):
         self.path = os.path.dirname(__file__)
@@ -33,6 +34,36 @@ class Crawler():
             if not os.path.isdir(os.path.join(self.path, self.story)):
                 raise
         self.storypath = os.path.join(self.path, self.story)
+
+    def init_replacement(self):
+        self.reps = {
+            u'\xa0': u' ',
+            u'\xbd': u'.5',
+            u'\xc7': u'C',
+            u'\xdc': u'U',
+            u'\xe0': u'a',
+            u'\xe4': u'a',
+            u'\xe9': u'e',
+            u'\xed': u'i',
+            u'\xf6': u'o',
+            u'\u0101': u'a',
+            u'\u014d': u'o',
+            u'\u01ce': u'a',
+            u'\u2013': u'-',
+            u'\u2018': u'\'',
+            u'\u2019': u'\'',
+            u'\u201c': u'"',
+            u'\u201d': u'"',
+            u'\u2022': u'*',
+            u'\u2026': u'...',
+            u'\u25ba': u'->',
+            u'\u25a0': u'---',
+            u'\u263f': u'M',
+            u'\u2666': u'*',
+        }
+        self.reps = dict((re.escape(key), value) for key, value in self.reps.iteritems())
+        self.reppattern = re.compile('|'.join(self.reps.keys()))
+
 
     def run(self):
         self.running = True
@@ -118,14 +149,20 @@ class Crawler():
         self.text = self.format_string(rawstring)
         
     def format_string(self, string):
+        return self.reppattern.sub(lambda match: self.reps[re.escape(match.group(0))], string)
+        """
         string = string.replace(u'\xa0', u' ')
         string = string.replace(u'\xbd', u'.5')
         string = string.replace(u'\xc7', u'C')
         string = string.replace(u'\xdc', u'U')
+        string = string.replace(u'\xe0', u'a')
         string = string.replace(u'\xe4', u'a')
         string = string.replace(u'\xe9', u'e')
         string = string.replace(u'\xed', u'i')
         string = string.replace(u'\xf6', u'o')
+        string = string.replace(u'\u0101', u'a')
+        string = string.replace(u'\u014d', u'o')
+        string = string.replace(u'\u01ce', u'a')
         string = string.replace(u'\u2013', u'-')
         string = string.replace(u'\u2018', u'\'')
         string = string.replace(u'\u2019', u'\'')
@@ -139,8 +176,9 @@ class Crawler():
         string = string.replace(u'\u2666', u'*')
         string = string.replace(u'\n', u'\n\n')
         string = string.strip()
+        """
         return string
-        
+
     def write(self):
         if self.output == 'single':
             self.filepath = os.path.join(self.storypath, self.story + '.txt')
