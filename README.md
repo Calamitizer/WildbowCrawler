@@ -17,7 +17,6 @@ Navigate to the downloaded directory (*e*.*g*. `~/Downloads/WildbowCrawler/`) in
 ```
 python main.py <storyname> <formatkey> <italics> <arcsep> <chapsep>
 ```
-,
 
 with arguments
 
