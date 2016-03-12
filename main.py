@@ -1,4 +1,10 @@
-# downloadXKCD.py
+#!/usr/bin/env
+
+"""
+WildbowCrawler, written by J. Alex Ruble
+
+A web-scraper for locally archiving Worm, Pact, and Twig.
+"""
 
 import os
 import sys
@@ -9,22 +15,58 @@ import bs4
 
 class Crawler():
     def __init__(self):
-        #self.url = 'http://parahumans.wordpress.com/category/stories-arcs-1-10/arc-1-gestation/1-01/'
-        self.url = 'https://parahumans.wordpress.com/2013/11/02/teneral-e-1/'
+        self.hardcode_data()
+        self.handle_arguments()
+        self.init_counters()
+        self.init_dir()
+        self.init_replacement()
+
+    def hardcode_data(self):
+        self.stories = [
+            'Worm',
+            'Pact',
+            'Twig',
+        ]
+        self.outputkeywords = [
+            'single',
+            'per-arc',
+        ]
+        self.urls = {
+            'Worm': 'http://parahumans.wordpress.com/category/stories-arcs-1-10/arc-1-gestation/1-01/',
+            'Pact': '',
+            'Twig': '',
+        }
         self.italicsstring = u'*'
         self.boldstring = u'**'
         self.underlinestring = u'_'
-        self.output = 'per-arc' # 'single' or 'per-arc'
-        self.arctag = '[ARC]'
-        self.chaptertag = '[CHAPTER]'
+
+    def handle_arguments(self):
+        args = sys.argv
+        if len(args) != 5:
+            print 'Wrong number of input arguments.'
+            self.quit(True)
+        story = args[1].capitalize()
+        if story in self.stories:
+            self.story = story
+        else:
+            print 'Invalid story.'
+            self.quit(True)
+        self.url = self.urls[story]
+        output = args[2].lower()
+        if output in self.outputkeywords:
+            self.output = output
+        else:
+            print 'Invalid output keyword.'
+            self.quit(True)
+        self.arctag = args[3]
+        self.chaptertag = args[4]
+
+    def init_counters(self):
         self.previousarc = u''
         self.arc = u''
         self.arcnumber = 0
         self.chapternumber = 0
-        self.story = 'Worm'
-        self.init_dir()
-        self.init_replacement()
-        
+
     def init_dir(self):
         self.path = os.path.dirname(__file__)
         print 'path: ' + `self.path`
@@ -91,7 +133,6 @@ class Crawler():
             self.get_text()
             self.write()
             self.get_next_url()
-        self.quit()
         
     def get_soup(self):
         print 'Accessing URL {0!s}...'.format(self.format_string(self.url))
@@ -108,7 +149,7 @@ class Crawler():
         match = self.soup.find(attrs={'class': 'entry-title'})
         if match == None:
             print 'No title found for URL {0!s}'.format(self.url)
-            self.quit()
+            self.quit(True)
         self.title = self.format_string(match.string)
         print 'Got title: {0!s}'.format(self.title)
 
@@ -225,11 +266,12 @@ class Crawler():
         if url:
             self.url = url['href']
         else:
-            self.quit()
+            self.quit(False)
         
-    def quit(self):
+    def quit(self, error):
         self.close_file()
         self.running = False
+        sys.exit('Aborting.' if error else 'Finished!')
     
 if __name__ == '__main__':
     crawler = Crawler()
