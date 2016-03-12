@@ -42,7 +42,7 @@ class Crawler():
         self.quit()
         
     def get_soup(self):
-        print 'Accessing URL {0!s}...'.format(self.url)
+        print 'Accessing URL {0!s}...'.format(self.format_string(self.url))
         res = requests.get(self.url)
         res.raise_for_status()
         self.soup = bs4.BeautifulSoup(res.text, 'html.parser')
@@ -57,7 +57,7 @@ class Crawler():
         if match == None:
             print 'No title found for URL {0!s}'.format(self.url)
             self.quit()
-        self.title = match.string
+        self.title = self.format_string(match.string)
         print 'Got title: {0!s}'.format(self.title)
 
     def get_arc(self):
@@ -106,6 +106,7 @@ class Crawler():
         
     def format_string(self, string):
         string = string.replace(u'\xa0', u' ')
+        string = string.replace(u'\xbd', u'.5')
         string = string.replace(u'\xdc', u'U')
         string = string.replace(u'\u2013', u'-')
         string = string.replace(u'\u2018', u'\'')
@@ -142,7 +143,7 @@ class Crawler():
             self.file.close()
     
     def get_next_url(self):
-        url = self.delimiters[0].find('a', attrs={'title': 'Next Chapter'})
+        url = self.delimiters[0].find('a', text=re.compile(r'Next Chapter'))
         if url:
             self.url = url['href']
         else:
