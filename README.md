@@ -10,31 +10,29 @@ This is a Python script that web-scrapes the serial fictions of Wildbow (J.C. Mc
 
 ## Usage Guide
 
-(Note: sysargs are not yet implemented, so this is subject to change.)
-
 Navigate to the downloaded directory (*e*.*g*. `~/Downloads/WildbowCrawler/`) in your terminal, then input the command
 
 ```
-python main.py <storyname> <formatkey> <arcsep> <chapsep>
+python main.py <storyname> <format> <arcsep> <chapsep>
 ```
 
 with arguments
 
-1. `<storyname>` -- This is the name of the story to be locally archived. This is case-insensitive; your files will be capitalized correctly either way. Presently, this should be one of
+1. `<storyname>` -- This is the name of the story to be locally archived. Presently, this should be one of
   * `worm`
   * `pact`
   * `twig`
-2. `<formatkey>` -- This is the keyword for which file structure the results will be placed in. Select one of
+2. `<format>` -- This is the keyword for which file structure the results will be placed in. Select one of
   * `single` -- this will create the `<storyname>` directory, containing `<storyname>.txt` with the full text of the story.
   * `per-arc` -- this will create the `<storyname>` directory, containing one `<arcnumber>_<arcname>.txt` file for each arc (*e*.*g*. `1_Gestation.txt`).
-3. `<arcsep>` and `<chapsep>` -- These are the strings inserted at the beginning of each arc and chapter, respectively, for CTRL+F purposes. Choose `none` for the empty string.
+3. `<arcsep>` and `<chapsep>` -- These are the strings inserted at the beginning of each arc and chapter, respectively, for CTRL+F purposes. Certain characters need to be escaped by quotes, as in `'#A'`. Choose `''` for no separator.
 
 Some example usages follow.
 
 ```
-python main.py worm per-arc * [ARC] [CHAPTER]
-python main.py pact single _ #A #C
-python main.py twig per-arc none none Chapter:
+python main.py worm per-arc [ARC] [CHAPTER]
+python main.py pact single '#A' '#C'
+python main.py twig per-arc '' Chapter:
 ```
 
 ## Changelog
@@ -46,10 +44,9 @@ This is the first stable version of WildbowCrawler. It successfully passes throu
 ## To-Do List
 
 * Support Pact and Twig
-* Implement sysargs
-* Write `Crawler.quit()`
 * Add opening to `per-arc`-style `.txt`s
 * Figure out packaging for imported modules (?)
+* ~~Replace `sys.argv` with the `argparse` module~~ Nevermind, I don't really see a benefit
 * Go back in time to prevent the birth of anyone somewhat responsible for unicode
 
 ## Jolly Cooperation

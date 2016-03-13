@@ -171,7 +171,7 @@ class Crawler():
             print 'Delimiter problem: ' + `len(self.delimiters)`
             for d in self.delimiters:
                 print d.prettify()
-            self.quit()
+            self.quit(True)
 
     def is_delimiter(self, tag):
         has_last = tag.find('a', text=re.compile(r'Last Chapter'), recursive=False)
@@ -204,39 +204,11 @@ class Crawler():
                     rawstring += unicode(element)
             else:
                 print 'Unknown element type ' + `type(element)` + '.'
-                self.quit()
+                self.quit(True)
         self.text = self.format_string(rawstring)
         
     def format_string(self, string):
         return self.reppattern.sub(lambda match: self.reps[re.escape(match.group(0))], string)
-        """
-        string = string.replace(u'\xa0', u' ')
-        string = string.replace(u'\xbd', u'.5')
-        string = string.replace(u'\xc7', u'C')
-        string = string.replace(u'\xdc', u'U')
-        string = string.replace(u'\xe0', u'a')
-        string = string.replace(u'\xe4', u'a')
-        string = string.replace(u'\xe9', u'e')
-        string = string.replace(u'\xed', u'i')
-        string = string.replace(u'\xf6', u'o')
-        string = string.replace(u'\u0101', u'a')
-        string = string.replace(u'\u014d', u'o')
-        string = string.replace(u'\u01ce', u'a')
-        string = string.replace(u'\u2013', u'-')
-        string = string.replace(u'\u2018', u'\'')
-        string = string.replace(u'\u2019', u'\'')
-        string = string.replace(u'\u201c', u'"')
-        string = string.replace(u'\u201d', u'"')
-        string = string.replace(u'\u2022', u'*')
-        string = string.replace(u'\u2026', u'...')
-        string = string.replace(u'\u25ba', u'->')
-        string = string.replace(u'\u25a0', u'---')
-        string = string.replace(u'\u263f', u'M')
-        string = string.replace(u'\u2666', u'*')
-        string = string.replace(u'\n', u'\n\n')
-        string = string.strip()
-        """
-        return string
 
     def write(self):
         if self.output == 'single':
