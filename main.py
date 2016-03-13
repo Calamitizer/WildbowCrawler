@@ -213,20 +213,22 @@ class Crawler():
     def write(self):
         if self.output == 'single':
             self.filepath = os.path.join(self.storypath, self.story + '.txt')
-            print 'Writing chapter {0!s} to file {1!s}'.format(self.title, self.filepath)
+            print 'Writing chapter {0} to file {1}'.format(self.title, self.filepath)
             if not hasattr(self, 'file'):
                 self.file = open(self.filepath, 'w')
-                self.file.write('{0!s}\nby Wildbow (J.C. McCrae)\n\n'.format(self.story))
+                self.file.write('{0}\nby Wildbow (J.C. McCrae)\n\n'.format(self.story))
             if self.arc != self.previousarc:
-                self.file.write('{0!s}    {1!s}\n\n'.format(self.arctag, self.arc))
+                self.file.write('{0}    {1!s}\n\n'.format(self.arctag, self.arc))
         elif self.output == 'per-arc':
             if self.previousarc != self.arc:
                 self.close_file()
-                self.filepath = os.path.join(self.storypath, '{0:d}_{1!s}.txt'.format(self.arcnumber, self.arc))
+                self.filepath = os.path.join(self.storypath, '{0:d}_{1}.txt'.format(self.arcnumber, self.arc))
                 self.file = open(self.filepath, 'w')
-                self.file.write('{0!s}    {1!s}\n\n'.format(self.arctag, self.arc))
-        self.file.write('{0!s}    {1!s}\n\n'.format(self.chaptertag, self.title))
-        self.file.write('{0!s}\n\n'.format(self.text))
+                if self.arcnumber == 1:
+                    self.file.write('{0}\nby Wildbow (J.C. McCrae)\n\n'.format(self.story))
+                self.file.write('{0}    {1}\n\n'.format(self.arctag, self.arc))
+        self.file.write('{0}    {1}\n\n'.format(self.chaptertag, self.title))
+        self.file.write('{0}\n\n'.format(self.text))
     
     def close_file(self):
         if hasattr(self, 'file'):
