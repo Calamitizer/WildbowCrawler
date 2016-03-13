@@ -44,7 +44,6 @@ This is the first stable version of WildbowCrawler. It successfully passes throu
 ## To-Do List
 
 * Support Pact and Twig
-* Add opening to `per-arc`-style `.txt`s
 * Figure out packaging for imported modules (?)
 * ~~Replace `sys.argv` with the `argparse` module~~ Nevermind, I don't really see a benefit
 * Go back in time to prevent the birth of anyone somewhat responsible for unicode
