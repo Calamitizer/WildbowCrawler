@@ -1,4 +1,4 @@
-# WildbowCrawler
+# Crawler
 
 ## written by J. Alex Ruble (Calamitizer)
 
