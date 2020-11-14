@@ -228,7 +228,7 @@ class Crawler():
                     self.file.write('{0}\nby Wildbow (J.C. McCrae)\n\n'.format(self.story))
                 self.file.write('{0}    {1}\n\n'.format(self.arctag, self.arc))
         self.file.write('{0}    {1}\n\n'.format(self.chaptertag, self.title))
-        self.file.write('{0}\n\n'.format(self.text))
+        self.file.write('{0}\n\n'.format(self.text.encode('ascii', 'ignore')))
 
     def close_file(self):
         if hasattr(self, 'file'):
